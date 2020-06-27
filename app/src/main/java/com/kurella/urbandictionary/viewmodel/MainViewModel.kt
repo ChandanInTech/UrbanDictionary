@@ -54,6 +54,7 @@ class MainViewModel : ViewModel() {
 
                 if (unSortedList.isNullOrEmpty()) {
                     toastStringLiveData.value = "No definitions found, try using a different word"
+                    shouldShowSpinnerLiveData.value = false
                     return
                 }
 

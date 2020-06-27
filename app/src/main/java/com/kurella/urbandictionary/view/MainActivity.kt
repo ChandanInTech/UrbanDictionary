@@ -1,10 +1,12 @@
 package com.kurella.urbandictionary.view
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,11 +40,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.getIsUpVoteSelectedLiveData().observe(this, Observer {
-            // TODO: 6/26/2020 Update fab color
             if (it) {
-
+                floatingActionButton.backgroundTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorGreen))
             } else {
-
+                floatingActionButton.backgroundTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorRed))
             }
         })
 
