@@ -20,6 +20,7 @@ class MainViewModel : ViewModel() {
     private var isUpVoteSelected = MutableLiveData(true)
     private var definitionListLiveData = MutableLiveData<List<MeaningData>>()
     private var shouldShowSpinnerLiveData = MutableLiveData(false)
+    private var toastStringLiveData = MutableLiveData<String>()
 
     fun getShouldShowSpinnerLiveData() = shouldShowSpinnerLiveData as LiveData<Boolean>
 
@@ -51,6 +52,11 @@ class MainViewModel : ViewModel() {
                 response: Response<UrbanDictionaryResponse>
             ) {
                 val unSortedList = response.body()?.listDataItem
+
+                if (unSortedList.isNullOrEmpty()){
+                    toastStringLiveData.value = "No definitions found, try using a different word"
+                }
+
                 var sortedList: List<ListDataItem>? = null
 
                 isUpVoteSelected.value?.also {isUpVote ->
@@ -82,4 +88,5 @@ class MainViewModel : ViewModel() {
     }
 
     fun getIsUpVoteSelectedLiveData() = isUpVoteSelected as LiveData<Boolean>
+    fun getToastLiveData() = toastStringLiveData as LiveData<String>
 }

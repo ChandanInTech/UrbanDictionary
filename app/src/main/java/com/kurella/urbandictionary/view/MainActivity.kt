@@ -1,12 +1,10 @@
 package com.kurella.urbandictionary.view
 
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,11 +29,16 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        viewModel.getToastLiveData().observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        })
+
         floatingActionButton.setOnClickListener {
             viewModel.updateIsUpVote()
         }
 
         viewModel.getIsUpVoteSelectedLiveData().observe(this, Observer {
+            // TODO: 6/26/2020 Update fab color
             if (it) {
 
             } else {
