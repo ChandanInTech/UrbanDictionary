@@ -11,9 +11,7 @@ import kotlinx.android.synthetic.main.response_item.view.*
 class DictionaryAdapter(var definitionList: ArrayList<MeaningData>) :
     RecyclerView.Adapter<DictionaryAdapter.DictionaryViewHolder>() {
 
-    class DictionaryViewHolder(val defView: View) : RecyclerView.ViewHolder(defView) {
-
-    }
+    class DictionaryViewHolder(val defView: View) : RecyclerView.ViewHolder(defView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DictionaryViewHolder {
         val defView = LayoutInflater.from(parent.context)
@@ -29,7 +27,7 @@ class DictionaryAdapter(var definitionList: ArrayList<MeaningData>) :
     override fun onBindViewHolder(holder: DictionaryViewHolder, position: Int) {
         val itemData = definitionList[position]
         holder.defView.definition.text = itemData.meaning
-        holder.defView.up_votes.text = itemData.upVotes
-        holder.defView.down_votes.text = itemData.downVotes
+        holder.defView.up_votes.text = itemData.upVotes.toString()
+        holder.defView.down_votes.text = itemData.downVotes.toString()
     }
 }

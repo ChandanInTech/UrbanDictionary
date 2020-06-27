@@ -1,9 +1,12 @@
 package com.kurella.urbandictionary.view
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,6 +43,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        viewModel.getShouldShowSpinnerLiveData().observe(this, Observer {
+            progressBar.visibility = if (it) View.VISIBLE else View.INVISIBLE
+        })
+
         search_bar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 viewModel.search(search_bar.query.toString())
@@ -55,10 +62,9 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getDefinitionLiveData().observe(this, Observer {
             definitionList.clear()
-            definitionList.addAll(it as ArrayList<MeaningData>)
+            definitionList.addAll(it)
             dict_rv.adapter?.notifyDataSetChanged()
-
-            Log.v("dfgsdfwe", definitionList.toString())
+            dict_rv.smoothScrollToPosition(0)
         })
     }
 

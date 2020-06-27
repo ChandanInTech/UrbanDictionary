@@ -36,7 +36,6 @@
         app:layout_constraintEnd_toStartOf="@+id/cardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cardView"
-        app:srcCompat="@android:drawable/arrow_up_float"
         android:focusable="true" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class UrbanDictionaryResponse(
     @SerializedName("list")
-    val listDataItem: List<ListDataItem>
+    val listDataItem: ArrayList<ListDataItem>
 )
