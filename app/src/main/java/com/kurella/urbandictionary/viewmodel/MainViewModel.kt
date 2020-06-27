@@ -42,6 +42,8 @@ class MainViewModel : ViewModel() {
         callUrbanDictionary.enqueue(object : Callback<UrbanDictionaryResponse> {
             override fun onFailure(call: Call<UrbanDictionaryResponse>, t: Throwable) {
                 Log.e("Retrofit Call", t.message)
+                toastStringLiveData.value = "Something went wrong, please try again"
+                shouldShowSpinnerLiveData.value = false
             }
 
             override fun onResponse(
@@ -50,33 +52,32 @@ class MainViewModel : ViewModel() {
             ) {
                 val unSortedList = response.body()?.listDataItem
 
-                if (unSortedList.isNullOrEmpty()){
+                if (unSortedList.isNullOrEmpty()) {
                     toastStringLiveData.value = "No definitions found, try using a different word"
                     return
                 }
 
-                var sortedList: List<ListDataItem>? = null
-
-                isUpVoteSelected.value?.also {isUpVote ->
-                    sortedList = if (isUpVote){
-                        unSortedList.sortedByDescending{ it.thumbs_up }
-                    }else{
-                        unSortedList.sortedByDescending{ it.thumbs_down }
-                    }
-                }
-
-                definitionListLiveData.value = sortedList
-                shouldShowSpinnerLiveData.value = false
+                sortList(unSortedList)
             }
         })
     }
 
-    fun sortList(unSortedList: ArrayList<ListDataItem>){
+    fun sortList(unSortedList: List<ListDataItem>) {
+        isUpVoteSelected.value?.also { isUpVote ->
+            if (isUpVote) {
+                definitionListLiveData.value = unSortedList.sortedByDescending { it.thumbs_up }
+            } else {
+                definitionListLiveData.value = unSortedList.sortedByDescending { it.thumbs_down }
+            }
+        }
 
+        shouldShowSpinnerLiveData.value = false
+        toastStringLiveData.value = "List updated"
     }
 
     fun updateIsUpVote() {
         isUpVoteSelected.value = isUpVoteSelected.value?.not()
+        definitionListLiveData.value?.also { sortList(it) }
     }
 
     fun getIsUpVoteSelectedLiveData() = isUpVoteSelected as LiveData<Boolean>

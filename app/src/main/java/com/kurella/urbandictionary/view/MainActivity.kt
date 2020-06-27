@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         viewModel.getToastLiveData().observe(this, Observer {
-            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })
 
         floatingActionButton.setOnClickListener {
