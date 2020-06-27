@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kurella.urbandictionary.model.BASE_URL
-import com.kurella.urbandictionary.model.MeaningData
 import com.kurella.urbandictionary.model.UrbanDictApi
 import com.kurella.urbandictionary.model.json_data_classes.ListDataItem
 import com.kurella.urbandictionary.model.json_data_classes.UrbanDictionaryResponse
@@ -18,20 +17,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainViewModel : ViewModel() {
 
     private var isUpVoteSelected = MutableLiveData(true)
-    private var definitionListLiveData = MutableLiveData<List<MeaningData>>()
+    private var definitionListLiveData = MutableLiveData<List<ListDataItem>>()
     private var shouldShowSpinnerLiveData = MutableLiveData(false)
     private var toastStringLiveData = MutableLiveData<String>()
 
     fun getShouldShowSpinnerLiveData() = shouldShowSpinnerLiveData as LiveData<Boolean>
 
-    fun getDefinitionLiveData() = definitionListLiveData as LiveData<List<MeaningData>>
+    fun getDefinitionLiveData() = definitionListLiveData as LiveData<List<ListDataItem>>
 
     fun search(query: String) {
         Log.v("Search query", query)
 
         shouldShowSpinnerLiveData.value = true
-
-        val definitionList = ArrayList<MeaningData>()
 
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -55,32 +52,27 @@ class MainViewModel : ViewModel() {
 
                 if (unSortedList.isNullOrEmpty()){
                     toastStringLiveData.value = "No definitions found, try using a different word"
+                    return
                 }
 
                 var sortedList: List<ListDataItem>? = null
 
                 isUpVoteSelected.value?.also {isUpVote ->
                     sortedList = if (isUpVote){
-                        unSortedList?.sortedByDescending{ it.thumbs_up }
+                        unSortedList.sortedByDescending{ it.thumbs_up }
                     }else{
-                        unSortedList?.sortedByDescending{ it.thumbs_down }
+                        unSortedList.sortedByDescending{ it.thumbs_down }
                     }
                 }
 
-                sortedList?.forEach {
-                    definitionList.add(
-                        MeaningData(
-                            it.definition,
-                            it.thumbs_up,
-                            it.thumbs_down
-                        )
-                    )
-                }
-
-                definitionListLiveData.value = definitionList
+                definitionListLiveData.value = sortedList
                 shouldShowSpinnerLiveData.value = false
             }
         })
+    }
+
+    fun sortList(unSortedList: ArrayList<ListDataItem>){
+
     }
 
     fun updateIsUpVote() {

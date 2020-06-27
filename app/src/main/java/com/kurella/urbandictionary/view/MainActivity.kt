@@ -9,14 +9,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kurella.urbandictionary.R
-import com.kurella.urbandictionary.model.MeaningData
+import com.kurella.urbandictionary.model.json_data_classes.ListDataItem
 import com.kurella.urbandictionary.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    private var definitionList = ArrayList<MeaningData>()
+    private var definitionList = ArrayList<ListDataItem>()
     lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
