@@ -3,7 +3,9 @@ package com.kurella.urbandictionary.view
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.kurella.urbandictionary.DefinitionDiffCallBacks
 import com.kurella.urbandictionary.R
 import com.kurella.urbandictionary.model.json_data_classes.ListDataItem
 import kotlinx.android.synthetic.main.response_item.view.*
@@ -15,9 +17,14 @@ class DictionaryAdapter :
 
     class DictionaryViewHolder(val defView: View) : RecyclerView.ViewHolder(defView)
 
-    fun setData(definitionList: List<ListDataItem>) {
-        this.definitionList.clear()
-        this.definitionList.addAll(definitionList)
+    fun setData(newDefinitionList: List<ListDataItem>) {
+        definitionList.clear()
+        definitionList.addAll(newDefinitionList)
+
+        val diffResults =
+            DiffUtil.calculateDiff(DefinitionDiffCallBacks(newDefinitionList, definitionList))
+
+        diffResults.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DictionaryViewHolder {

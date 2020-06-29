@@ -69,8 +69,6 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getDefinitionLiveData().observe(this, Observer {
             dictionaryAdapter.setData(it)
-            dict_rv.adapter?.notifyDataSetChanged()
-            dict_rv.smoothScrollToPosition(0)
         })
     }
 
