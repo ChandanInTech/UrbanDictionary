@@ -18,11 +18,11 @@ class DictionaryAdapter :
     class DictionaryViewHolder(val defView: View) : RecyclerView.ViewHolder(defView)
 
     fun setData(newDefinitionList: List<ListDataItem>) {
-        definitionList.clear()
-        definitionList.addAll(newDefinitionList)
-
         val diffResults =
             DiffUtil.calculateDiff(DefinitionDiffCallBacks(newDefinitionList, definitionList))
+
+        definitionList.clear()
+        definitionList.addAll(newDefinitionList)
 
         diffResults.dispatchUpdatesTo(this)
     }
