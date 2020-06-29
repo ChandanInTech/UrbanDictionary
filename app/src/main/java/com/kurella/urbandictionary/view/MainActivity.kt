@@ -11,20 +11,21 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kurella.urbandictionary.R
-import com.kurella.urbandictionary.model.json_data_classes.ListDataItem
 import com.kurella.urbandictionary.viewmodel.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
-    private var definitionList = ArrayList<ListDataItem>()
     lateinit var viewModel: MainViewModel
+    lateinit var dictionaryAdapter: DictionaryAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        dictionaryAdapter = DictionaryAdapter()
     }
 
 
@@ -67,8 +68,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView()
 
         viewModel.getDefinitionLiveData().observe(this, Observer {
-            definitionList.clear()
-            definitionList.addAll(it)
+            dictionaryAdapter.setData(it)
             dict_rv.adapter?.notifyDataSetChanged()
             dict_rv.smoothScrollToPosition(0)
         })
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         dict_rv.apply {
             layoutManager =
                 LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-            adapter = DictionaryAdapter(definitionList)
+            adapter = dictionaryAdapter
         }
     }
 }

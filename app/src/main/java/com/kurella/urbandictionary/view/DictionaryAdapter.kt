@@ -8,10 +8,17 @@ import com.kurella.urbandictionary.R
 import com.kurella.urbandictionary.model.json_data_classes.ListDataItem
 import kotlinx.android.synthetic.main.response_item.view.*
 
-class DictionaryAdapter(var definitionList: ArrayList<ListDataItem>) :
+class DictionaryAdapter :
     RecyclerView.Adapter<DictionaryAdapter.DictionaryViewHolder>() {
 
+    private val definitionList = ArrayList<ListDataItem>()
+
     class DictionaryViewHolder(val defView: View) : RecyclerView.ViewHolder(defView)
+
+    fun setData(definitionList: List<ListDataItem>) {
+        this.definitionList.clear()
+        this.definitionList.addAll(definitionList)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DictionaryViewHolder {
         val defView = LayoutInflater.from(parent.context)
