@@ -27,6 +27,7 @@ class MainViewModel : ViewModel() {
 
     fun getDefinitionLiveData() = definitionListLiveData as LiveData<List<ListDataItem>>
 
+    // getting definitions making a retrofit call
     fun search(query: String) {
         Log.v("Search query", query)
 
@@ -37,9 +38,7 @@ class MainViewModel : ViewModel() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val response = retrofit.create(UrbanDictApi::class.java)
-
-        val callUrbanDictionary = response.userEntry(query)
+        val callUrbanDictionary = retrofit.create(UrbanDictApi::class.java).userEntry(query)
 
         callUrbanDictionary.enqueue(object : Callback<UrbanDictionaryResponse> {
             override fun onFailure(call: Call<UrbanDictionaryResponse>, t: Throwable) {
@@ -65,6 +64,7 @@ class MainViewModel : ViewModel() {
         })
     }
 
+    // Sorting list based on user choice
     fun sortList(unSortedList: List<ListDataItem>) {
         isUpVoteSelected.value?.also { isUpVote ->
             if (isUpVote) {
@@ -78,6 +78,7 @@ class MainViewModel : ViewModel() {
         toastStringLiveData.value = "List updated"
     }
 
+    // Updating isUpVote and changing FAB color
     fun updateIsUpVote() {
         isUpVoteSelected.value = isUpVoteSelected.value?.not()
         definitionListLiveData.value?.also { sortList(it) }
