@@ -17,17 +17,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var viewModel: MainViewModel
-    lateinit var dictionaryAdapter: DictionaryAdapter
+    private lateinit var viewModel: MainViewModel
+    private val dictionaryAdapter = DictionaryAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
-        dictionaryAdapter = DictionaryAdapter()
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -40,14 +37,9 @@ class MainActivity : AppCompatActivity() {
             viewModel.updateIsUpVote()
         }
 
-        viewModel.getIsUpVoteSelectedLiveData().observe(this, Observer {
-            if (it) {
-                floatingActionButton.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorGreen))
-            } else {
-                floatingActionButton.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.colorRed))
-            }
+        viewModel.getFabColorLiveData().observe(this, Observer {
+            floatingActionButton.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(this, it))
         })
 
         viewModel.getShouldShowSpinnerLiveData().observe(this, Observer {

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.kurella.urbandictionary.R
 import com.kurella.urbandictionary.model.BASE_URL
 import com.kurella.urbandictionary.model.UrbanDictApi
 import com.kurella.urbandictionary.model.json_data_classes.ListDataItem
@@ -16,10 +17,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainViewModel : ViewModel() {
 
-    private var isUpVoteSelected = MutableLiveData(true)
-    private var definitionListLiveData = MutableLiveData<List<ListDataItem>>()
-    private var shouldShowSpinnerLiveData = MutableLiveData(false)
-    private var toastStringLiveData = MutableLiveData<String>()
+    private val isUpVoteSelected = MutableLiveData(true)
+    private val definitionListLiveData = MutableLiveData<List<ListDataItem>>()
+    private val shouldShowSpinnerLiveData = MutableLiveData(false)
+    private val toastStringLiveData = MutableLiveData<String>()
+    private val fabColorLiveData = MutableLiveData<Int>(R.color.colorGreen)
 
     fun getShouldShowSpinnerLiveData() = shouldShowSpinnerLiveData as LiveData<Boolean>
 
@@ -79,8 +81,14 @@ class MainViewModel : ViewModel() {
     fun updateIsUpVote() {
         isUpVoteSelected.value = isUpVoteSelected.value?.not()
         definitionListLiveData.value?.also { sortList(it) }
+
+        isUpVoteSelected.value?.also {
+            fabColorLiveData.value = if (it) R.color.colorGreen else R.color.colorRed
+        }
+
     }
 
-    fun getIsUpVoteSelectedLiveData() = isUpVoteSelected as LiveData<Boolean>
+    fun getFabColorLiveData() = fabColorLiveData as LiveData<Int>
+
     fun getToastLiveData() = toastStringLiveData as LiveData<String>
 }
